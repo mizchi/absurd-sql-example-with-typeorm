@@ -1,8 +1,11 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-module.exports = {
+/**
+ * @type {import('webpack').Configuration}
+ */
+module.exports = (env, argv) => ({
   devServer: {
-    publicPath: "/",
+    publicPath: "auto",
     hot: true,
     headers: {
       "Cross-Origin-Opener-Policy": "same-origin",
@@ -10,7 +13,6 @@ module.exports = {
     },
   },
   entry: "./src/index.ts",
-  mode: "development",
   resolve: {
     extensions: [".dev.js", ".js", ".json", ".wasm", ".ts", ".tsx"],
     fallback: {
@@ -32,5 +34,8 @@ module.exports = {
       },
     ],
   },
-  plugins: [new HtmlWebpackPlugin({ template: "./src/index.html" })],
-};
+  plugins:
+    argv.mode === "production"
+      ? []
+      : [new HtmlWebpackPlugin({ template: "./src/index.html" })],
+});

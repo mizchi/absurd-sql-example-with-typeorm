@@ -1,3 +1,9 @@
 declare module "absurd-sql";
 declare module "absurd-sql/dist/*";
-declare module "@jlongster/sql.js";
+
+// import static, {} from "sql.js";
+// import initSqlJs, { SqlJsStatic, Database } from "sql.js";
+declare module "@jlongster/sql.js" {
+  const t: any;
+  export default t;
+}
