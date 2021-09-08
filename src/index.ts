@@ -1,11 +1,16 @@
-import { initBackend } from "absurd-sql/dist/indexeddb-main-thread";
+import type { Api } from "./worker";
 
-function init() {
+import { initBackend } from "absurd-sql/dist/indexeddb-main-thread";
+import { wrap } from "comlink";
+
+async function init() {
   let worker = new Worker(new URL("./worker", import.meta.url));
-  // This is only required because Safari doesn't support nested
-  // workers. This installs a handler that will proxy creating web
-  // workers through the main thread
   initBackend(worker);
+
+  const api: Api = wrap(worker);
+  console.log(api);
+  const x = await api.runQueries();
+  console.log("server result", x);
 }
 
-init();
+init().then(console.error);

@@ -1,6 +1,7 @@
 import initSqlJs from "@jlongster/sql.js";
 import { SQLiteFS } from "absurd-sql";
 import IndexedDBBackend from "absurd-sql/dist/indexeddb-backend";
+import { expose } from "comlink";
 
 async function init() {
   let SQL = await initSqlJs({ locateFile: (file: string) => file });
@@ -35,8 +36,13 @@ async function runQueries() {
 
   stmt = db.prepare(`SELECT SUM(value) FROM kv`);
   stmt.step();
-  console.log("Result:", stmt.getAsObject());
+  const result = stmt.getAsObject();
+  // console.log("Result:", result);
   stmt.free();
+  return result;
 }
 
-runQueries();
+const api = { runQueries };
+export type Api = typeof api;
+
+expose(api);
