@@ -1,23 +1,36 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   devServer: {
-    publicPath: '/',
+    publicPath: "/",
     hot: true,
     headers: {
-      'Cross-Origin-Opener-Policy': 'same-origin',
-      'Cross-Origin-Embedder-Policy': 'require-corp'
-    }
+      "Cross-Origin-Opener-Policy": "same-origin",
+      "Cross-Origin-Embedder-Policy": "require-corp",
+    },
   },
-  entry: './src/index.js',
-  mode: 'development',
+  entry: "./src/index.ts",
+  mode: "development",
   resolve: {
-    extensions: ['.dev.js', '.js', '.json', '.wasm'],
+    extensions: [".dev.js", ".js", ".json", ".wasm", ".ts", ".tsx"],
     fallback: {
       crypto: false,
       path: false,
-      fs: false
-    }
+      fs: false,
+    },
   },
-  plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })]
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: {
+          loader: "ts-loader",
+          options: {
+            transpileOnly: true,
+          },
+        },
+      },
+    ],
+  },
+  plugins: [new HtmlWebpackPlugin({ template: "./src/index.html" })],
 };
