@@ -1,3 +1,5 @@
+const DefinePlugin = require("webpack").DefinePlugin;
+
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 /**
@@ -19,6 +21,7 @@ module.exports = (env, argv) => ({
       crypto: false,
       path: false,
       fs: false,
+      "react-native-sqlite-storage": false,
     },
   },
   module: {
@@ -37,5 +40,15 @@ module.exports = (env, argv) => ({
   plugins:
     argv.mode === "production"
       ? []
-      : [new HtmlWebpackPlugin({ template: "./src/index.html" })],
+      : [
+          new HtmlWebpackPlugin({ template: "./src/index.html" }),
+          new DefinePlugin({
+            "process.env.NODE_DEBUG": JSON.stringify(false),
+            // "process.platform": JSON.stringify("browser"),
+            // "process.env": "{}",
+            // "process.stdout": JSON.stringify(null),
+            // process: JSON.stringify({ env: {} }),
+          }),
+        ],
+  devtool: false,
 });

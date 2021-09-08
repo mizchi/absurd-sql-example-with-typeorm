@@ -8,8 +8,8 @@ async function init() {
   initBackend(worker);
   const api: Api = wrap(worker);
   await api.ensure();
-  const data = [...Array(100).keys()].map((i) => [Math.random() * 1000, i]);
-  await api.runMany("INSERT INTO kv (key, value) VALUES (?, ?)", data);
+  // const data = [...Array(100).keys()].map((i) => [Math.random() * 1000, i]);
+  // await api.runMany("INSERT INTO kv (key, value) VALUES (?, ?)", data);
 
   const result = await api.run(`SELECT SUM(value) FROM kv`);
   console.log(result);

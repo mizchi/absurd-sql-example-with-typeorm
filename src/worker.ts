@@ -3,6 +3,9 @@ import initSqlJs from "@jlongster/sql.js";
 import { SQLiteFS } from "absurd-sql";
 import IndexedDBBackend from "absurd-sql/dist/indexeddb-backend";
 import { expose } from "comlink";
+import localForage from "localforage";
+
+import { createConnection } from "typeorm";
 
 let _db: Database | null = null;
 function db() {
@@ -12,6 +15,24 @@ function db() {
   return _db;
 }
 
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  JoinColumn,
+} from "typeorm";
+
+// import {Post} from "./Post";
+
+@Entity()
+class User {
+  @PrimaryGeneratedColumn()
+  id: number;
+  @Column()
+  name: string;
+}
+
 async function ensure() {
   if (_db) {
     return _db;
@@ -19,6 +40,51 @@ async function ensure() {
   const SQL = await (initSqlJs as InitSqlJsStatic)({
     locateFile: (file: string) => file,
   });
+  // @ts-ignore
+  globalThis.window = self;
+  // @ts-ignore
+  globalThis.window.SQL = SQL;
+  // @ts-ignore
+  globalThis.window.localforage = localForage;
+  // @ts-ignore
+  globalThis.localStorage = {
+    // @ts-ignore
+    getItem(key: string) {
+      console.log("getItem:mock", key);
+      return undefined;
+    },
+    setItem(key: string, val) {
+      console.log("setItem:mock", key, val.length);
+      return undefined;
+    },
+  };
+  const conn = await createConnection({
+    type: "sqljs",
+    location: "test",
+    autoSave: true,
+    useLocalForage: true,
+    entities: [
+      User,
+      // Author,
+      // Post,
+      // Category
+    ],
+    logging: ["query", "schema"],
+    synchronize: true,
+  });
+  const userRepository = conn.getRepository(User);
+
+  const user = new User();
+  user.id = Math.floor(Math.random() * 10000);
+  user.name = "Mizchi-" + Math.random().toString();
+  await userRepository.save(user);
+
+  const users = await userRepository.find();
+  console.log(
+    "users",
+    users.map((u) => u.name)
+  );
+
   // @ts-ignore
   let sqlFS = new SQLiteFS(SQL.FS, new IndexedDBBackend());
   // @ts-ignore
