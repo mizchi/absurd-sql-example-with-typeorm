@@ -6,6 +6,7 @@ demo: https://heuristic-perlman-94f8f4.netlify.app/
 - absurd-sql: indexeddb backend sql.js adapter
 - comlink: WebWorker RPC
 - typeorm: ORM with sqlite(sql.js) adapter
+- netlify
 
 ![](https://gyazo.com/2afcba1d33bd0d2699cf94323119a8a8.png)
 
