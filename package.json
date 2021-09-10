@@ -1,5 +1,12 @@
 {
-  "name": "absurd-example-project",
+  "name": "absurd-example-project-sqljs-typeorm-comlink",
+  "keywords": [
+    "absurd-sql",
+    "comlink",
+    "typeorm",
+    "sqlite",
+    "sql.js"
+  ],
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
