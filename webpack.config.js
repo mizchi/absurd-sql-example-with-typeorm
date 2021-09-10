@@ -37,18 +37,16 @@ module.exports = (env, argv) => ({
       },
     ],
   },
-  plugins:
-    argv.mode === "production"
-      ? []
-      : [
-          new HtmlWebpackPlugin({ template: "./src/index.html" }),
-          new DefinePlugin({
-            "process.env.NODE_DEBUG": JSON.stringify(false),
-            // "process.platform": JSON.stringify("browser"),
-            // "process.env": "{}",
-            // "process.stdout": JSON.stringify(null),
-            // process: JSON.stringify({ env: {} }),
-          }),
-        ],
+  plugins: [
+    new HtmlWebpackPlugin({ template: "./src/index.html" }),
+    new DefinePlugin({
+      "process.env.NODE_ENV": JSON.stringify(argv.mode),
+      "process.env.PERF_BUILD": false,
+    }),
+  ],
+  // plugins:
+  //   argv.mode === "production"
+  //     ? []
+  //     : [new HtmlWebpackPlugin({ template: "./src/index.html" })],
   devtool: false,
 });

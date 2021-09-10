@@ -8,9 +8,13 @@ initBackend(worker);
 const api: Remote<Api> = wrap(worker);
 
 async function init() {
+  document.body.innerHTML = "Loading...";
   await api.setup();
+  document.body.innerHTML = "Worker Ready";
+
   await api.createUser();
   const users = await api.getUsers();
+  document.body.innerHTML = "Result:" + JSON.stringify(users);
   console.log(users);
 }
 
